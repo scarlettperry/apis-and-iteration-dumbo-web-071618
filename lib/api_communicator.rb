@@ -7,22 +7,6 @@ def get_all_characters(character_hash)
 end 
 
 def get_character_movies_from_api(character)
-  #make the web request
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
-  character_hash = JSON.parse(all_characters)
-  all_characters = get_all_characters(character_hash)
-  film_info = []
-
-  #(todo) come back to refactor
-  #select wrong choice for this one, always returns an array
-  character_choice = all_characters.find do |person_hash|
-                      person_hash["name"] == character
-                    end
-  
-  character_choice["films"].collect do |url|
-    response = RestClient.get(url)
-    film_info.push(JSON.parse(response))
-  end
   # iterate over the character hash to find the collection of `films` for the given
   #   `character`
   # collect those film API urls, make a web request to each URL to get the info
@@ -33,13 +17,34 @@ def get_character_movies_from_api(character)
   #  and that method will do some nice presentation stuff: puts out a list
   #  of movies by title. play around with puts out other info about a given film.
 
-  binding.pry
-end
+  # binding.pry
 
-get_character_movies_from_api("Luke Skywalker")
+  #make the web request
+  all_characters = RestClient.get('http://www.swapi.co/api/people/')
+  character_hash = JSON.parse(all_characters)
+  all_characters = get_all_characters(character_hash)
+  film_info = []
+
+  #(todo) come back to refactor
+  #select wrong choice for this one, always returns an array
+  character_choice = all_characters.find do |person_hash|
+                      person_hash["name"].downcase == character
+                    end
+  
+  character_choice["films"].collect do |url|
+    response = RestClient.get(url)
+    film_info.push(JSON.parse(response))
+  end
+  film_info
+  # binding.pry
+end
 
 def parse_character_movies(films_hash)
   # some iteration magic and puts out the movies in a nice list
+  films_hash.each do |film_hash|
+    puts "#{film_hash["title"]}"
+    # binding.pry
+  end
 end
 
 def show_character_movies(character)
@@ -47,7 +52,7 @@ def show_character_movies(character)
   parse_character_movies(films_hash)
 end
 
-## BONUS
+# ## BONUS
 
-# that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
-# can you split it up into helper methods?
+# # that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
+# # can you split it up into helper methods?

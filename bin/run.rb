@@ -4,7 +4,7 @@ require_relative "../lib/api_communicator.rb"
 require_relative "../lib/command_line_interface.rb"
 
 require 'rest-client'
-character_data = RestClient.get('http://swapi.co/api/people)
+character_data = RestClient.get('http://swapi.co/api/people')
 
 
 welcome
