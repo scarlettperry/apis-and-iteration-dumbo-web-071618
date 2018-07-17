@@ -2,23 +2,23 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
+#input: URL
+#output: parsed JSON
+def get_response_body(element_url)
+  response = RestClient.get(element_url)
+  JSON.parse(response)
+end
+
 #input: nothing
 #output: a hash of all the characters' info
 def get_all_characters
-  #make the web request
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
-  character_hash = JSON.parse(all_characters)
-
-  character_hash["results"]
+  get_response_body('http://www.swapi.co/api/people/')["results"]
 end
 
 #input: nothing
 #output: a hash of each movie's info
 def get_all_movies
-  all_movies = RestClient.get('http://www.swapi.co/api/films')
-  movie_hash = JSON.parse(all_movies)
-
-  movie_hash["results"]
+  get_response_body('http://www.swapi.co/api/films')["results"]
 end
 
 #input: string movie name
@@ -47,8 +47,7 @@ def get_character_movies_from_api(character)
   
   unless character_info == nil
     character_info["films"].collect do |url|
-      response = RestClient.get(url)
-      JSON.parse(response)
+      get_response_body(url)
     end
   end
 end
@@ -64,7 +63,7 @@ def parse_character_movies(films_hash)
 end
 
 def parse_movie_info(movie_info)
-  
+
 end
 
 #input: string character name
@@ -79,10 +78,7 @@ end
 #input: Takes in URL of JSON you would like parse
 #output: The value of the name or title key in said JSON object
 def what_to_call_it(element_url)
-  response = RestClient.get(element_url)
-  response_body = JSON.parse(response)
-
-  response_body.find do |info|
+  get_response_body(element_url).find do |info|
     if info == "title" or info == "name"
       value
     end
@@ -90,4 +86,6 @@ def what_to_call_it(element_url)
 end
 
 what_to_call_it("https://swapi.co/api/films/2/")
+
+
 
