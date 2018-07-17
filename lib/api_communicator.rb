@@ -1,6 +1,7 @@
 require 'rest-client'
 require 'json'
 require 'pry'
+require 'rainbow'
 
 #input: URL
 #output: parsed JSON
@@ -27,8 +28,11 @@ def get_movie_info (movie)
   movie_info = get_all_movies.find do |movie_hash|
     movie_hash["title"].downcase == movie
   end
-
-  puts "#{movie_info}"
+  unless movie_info == nil
+    parse_movie_info(movie_info)
+  else
+    puts "This movie does not exist!"
+  end
 end
 
 #input: string character name
@@ -63,7 +67,15 @@ def parse_character_movies(films_hash)
 end
 
 def parse_movie_info(movie_info)
-
+  movie_info.each do |key, value|
+    if value.is_a?(Array)
+      puts Rainbow("#{key}").underline + ": "
+      value.each do |url|
+        # binding.pry
+        puts "#{what_to_call_it(url)}"
+      end
+    end
+  end
 end
 
 #input: string character name
@@ -78,14 +90,13 @@ end
 #input: Takes in URL of JSON you would like parse
 #output: The value of the name or title key in said JSON object
 def what_to_call_it(element_url)
-  get_response_body(element_url).find do |info|
+  get_response_body(element_url).find do |info, value|
+    # binding.pry
     if info == "title" or info == "name"
-      value
+      puts "\t#{value}"
     end
   end
 end
-
-what_to_call_it("https://swapi.co/api/films/2/")
 
 
 
