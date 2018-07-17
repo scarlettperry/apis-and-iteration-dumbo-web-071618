@@ -63,6 +63,10 @@ def parse_character_movies(films_hash)
   end
 end
 
+def parse_movie_info(movie_info)
+  
+end
+
 #input: string character name
 #output: output of helper functions
 def show_character_movies(character)
@@ -72,15 +76,18 @@ def show_character_movies(character)
   end
 end
 
+#input: Takes in URL of JSON you would like parse
+#output: The value of the name or title key in said JSON object
 def what_to_call_it(element_url)
-    response = RestClient.get(element_url)
-    JSON.parse(response)
+  response = RestClient.get(element_url)
+  response_body = JSON.parse(response)
 
-    binding.pry
+  response_body.find do |info|
+    if info == "title" or info == "name"
+      value
+    end
+  end
 end
 
 what_to_call_it("https://swapi.co/api/films/2/")
 
-def parse_movie_info(movie_info)
-
-end
