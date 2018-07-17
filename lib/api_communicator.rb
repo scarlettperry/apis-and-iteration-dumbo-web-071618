@@ -72,10 +72,15 @@ def show_character_movies(character)
   end
 end
 
+def what_to_call_it(element_url)
+    response = RestClient.get(element_url)
+    JSON.parse(response)
 
+    binding.pry
+end
 
+what_to_call_it("https://swapi.co/api/films/2/")
 
+def parse_movie_info(movie_info)
 
-title : A New Hope
-
-vehicles : "title or name" (https://www.swapi.co/api/vehicles/4/)
+end
